@@ -1,8 +1,11 @@
 package ru.geekbrains.homework13;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Car implements Runnable {
     private static int CARS_COUNT;
-    
+    private static boolean winner;
+
     private Race race;
     private int speed;
     private String name;
@@ -26,14 +29,16 @@ public class Car implements Runnable {
     public void run() {
         try {
             System.out.println(this.name + " готовится");
-            Thread.sleep(500 + (int)(Math.random() * 800));
+            Thread.sleep(500 + (int) (Math.random() * 800));
             System.out.println(this.name + " готов");
             Main.BARRIER.await();
             for (int i = 0; i < race.getStages().size(); i++) {
                 race.getStages().get(i).go(this);
             }
             synchronized (race.getMonitor()) {
-                if () {
+                if (!winner) {
+                    System.out.println("Победитель: " + this.name);
+                    winner = true;
                 }
             }
             Main.BARRIER.await();
